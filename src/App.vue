@@ -1,6 +1,5 @@
 <template>
   <div>
-    <p>123</p>
     <h1>ABCSD</h1>
   </div>
 </template>
