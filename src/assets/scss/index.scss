@@ -1,3 +1,27 @@
 @import url("tailwindcss/base");
 @import url("tailwindcss/components");
 @import url("tailwindcss/utilities");
+
+@layer base {
+     body {
+          @apply flex justify-center items-center w-screen h-screen overflow-hidden;
+
+          font-size: 16px;
+     }
+}
+
+.layout {
+     @apply p-8 rounded;
+
+     background-color: #34363a;
+}
+
+.document {
+     label {
+          @apply cursor-pointer;
+     }
+
+     input.upload {
+          @apply opacity-0 w-12;
+     }
+}
