@@ -9,7 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@vue/eslint-config-airbnb": "^7.0.0",
+    "@vue/eslint-config-prettier": "^7.0.0",
+    "@vue/eslint-config-standard": "^8.0.1",
     "@vue/eslint-config-typescript": "^11.0.2",
     "autoprefixer": "^10.4.13",
     "eslint": "^8.26.0",

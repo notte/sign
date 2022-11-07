@@ -8,20 +8,40 @@
 
           font-size: 16px;
      }
+
+     #app {
+          @apply w-full h-full;
+     }
 }
 
 .layout {
-     @apply p-8 rounded;
+     @apply p-8 rounded w-3/6;
 
      background-color: #34363a;
 }
 
 .document {
      label {
-          @apply cursor-pointer;
+          @apply inline-block cursor-pointer px-2 mb-2;
+
+          font-size: 1rem;
+          color: #49ffe1;
+          border-bottom: 2px solid #49ffe1;
+     }
+
+     p {
+          color: #fff;
+          font-size: 0.8rem;
      }
 
      input.upload {
-          @apply opacity-0 w-12;
+          @apply w-0;
+     }
+
+     button {
+          @apply rounded my-2 py-1 px-2;
+
+          font-size: 1rem;
+          background-color: #49ffe1;
      }
 }

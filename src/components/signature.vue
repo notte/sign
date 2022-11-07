@@ -1,14 +1,12 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
-  <div class="layout">
-    <uploadFile />
-  </div>
+  <div></div>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
-import uploadFile from "./components/uploadFile.vue";
 
 export default defineComponent({
-  components: { uploadFile },
+  components: {},
   setup() {
     return {};
   },
