@@ -4,13 +4,26 @@
 
 @layer base {
      body {
-          @apply flex justify-center items-center w-screen h-screen overflow-hidden;
+          @apply w-screen h-screen overflow-hidden;
 
           font-size: 16px;
      }
 
      #app {
-          @apply w-full h-full;
+          @apply w-full h-full flex justify-center items-center;
+     }
+
+     button {
+          @apply rounded my-2 py-1 px-2;
+
+          font-size: 1rem;
+          background-color: #49ffe1;
+     }
+
+     h3 {
+          font-size: 1.2rem;
+          font-weight: 700;
+          color: #49ffe1;
      }
 }
 
@@ -20,7 +33,7 @@
      background-color: #34363a;
 }
 
-.document {
+.uploadfile {
      label {
           @apply inline-block cursor-pointer px-2 mb-2;
 
@@ -36,12 +49,5 @@
 
      input.upload {
           @apply w-0;
-     }
-
-     button {
-          @apply rounded my-2 py-1 px-2;
-
-          font-size: 1rem;
-          background-color: #49ffe1;
      }
 }

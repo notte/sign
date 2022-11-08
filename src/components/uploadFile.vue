@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-  <div class="document">
+  <div class="uploadfile">
     <label for="upload">
       <input
         class="upload"
@@ -13,7 +13,9 @@
       />
       請選擇檔案
     </label>
+    <!-- 預覽上傳文件 -->
     <p>{{ fileName }}</p>
+    <div class="review"></div>
     <button type="button" class="active" @click="uploadFile(fileName)">
       上傳簽署文件
     </button>
