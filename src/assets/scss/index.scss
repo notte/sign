@@ -14,7 +14,7 @@
      }
 
      button {
-          @apply rounded my-2 py-1 px-2;
+          @apply rounded mt-4 py-1 px-2 block w-full;
 
           font-size: 1rem;
           background-color: #49ffe1;
@@ -27,13 +27,38 @@
      }
 }
 
+.steps {
+     @apply mb-2;
+
+     color: #fff;
+     font-size: 1.2rem;
+     font-weight: 600;
+}
+
+.tabs {
+     button {
+          justify-items: flex-end;
+          color: #83858a;
+          background-color: transparent;
+          font-weight: 600;
+     }
+
+     button.active {
+          color: #34363a;
+     }
+}
+
 .layout {
-     @apply p-8 rounded w-3/6;
+     @apply p-8 rounded w-3/6 flex flex-col;
 
      background-color: #34363a;
 }
 
 .uploadfile {
+     @apply p-8 text-center;
+
+     border: 2px dashed #fff;
+
      label {
           @apply inline-block cursor-pointer px-2 mb-2;
 
@@ -49,5 +74,39 @@
 
      input.upload {
           @apply w-0;
+     }
+}
+
+.signature {
+     .review {
+          @apply p-10 bg-white;
+     }
+
+     .sign-container {
+          @apply p-10 bg-white;
+     }
+
+     .small-button {
+          @apply mt-4 w-auto;
+
+          background-color: #fff;
+     }
+
+     h3 {
+          @apply mb-2;
+     }
+
+     ul {
+          @apply flex;
+
+          li {
+               @apply p-3 mt-4 mr-2 bg-white;
+
+               button {
+                    background-color: #83858a;
+                    color: #fff;
+                    font-size: 12px;
+               }
+          }
      }
 }

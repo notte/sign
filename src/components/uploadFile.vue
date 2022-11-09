@@ -1,5 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
+  <p class="steps">1. 上傳文件</p>
   <div class="uploadfile">
     <label for="upload">
       <input
@@ -10,16 +11,14 @@
         capture
         aria-label="file"
         ref="file"
+        @change="handleFiles($event)"
       />
       請選擇檔案
     </label>
-    <!-- 預覽上傳文件 -->
+    <p v-if="fileName === ''">或拖曳檔案至此處</p>
     <p>{{ fileName }}</p>
-    <div class="review"></div>
-    <button type="button" class="active" @click="uploadFile(fileName)">
-      上傳簽署文件
-    </button>
   </div>
+  <button type="button" class="active" @click="uploadFile">上傳簽署文件</button>
 </template>
 <script lang="ts">
 import { defineComponent, onMounted, ref } from "vue";
@@ -41,12 +40,15 @@ export default defineComponent({
       });
     });
 
-    function uploadFile(name: string) {
-      if (name) {
-        console.log(name);
-      }
+    function uploadFile(): void {
+      console.log(file.value);
     }
-    return { file, fileName, uploadFile };
+    function handleFiles(event: Event): void {
+      // const fileItem = new File();
+      // let reader = new FileReader();
+      console.log((event as any).target.files[0]);
+    }
+    return { file, fileName, uploadFile, handleFiles };
   },
 });
 </script>
