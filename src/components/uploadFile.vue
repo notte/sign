@@ -17,7 +17,7 @@
     </label>
     <p v-if="fileName === ''">或拖曳檔案至此處</p>
     <p>{{ fileName }}</p>
-    <canvas class="pdf-item" :id="`pdf-canvas-${item}`"></canvas>
+    <canvas class="pdf-item"></canvas>
     <!-- <preview /> -->
   </div>
   <button type="button" class="active" @click="uploadFile">上傳簽署文件</button>
@@ -54,19 +54,21 @@ export default defineComponent({
     }
 
     function handleFiles(event: Event): void {
+      const fileItem = (event as any).target.files[0];
       const fileReader = new FileReader();
-      const fileType = (event as any).target.files[0].type;
-      fileReader.readAsDataURL((event as any).target.files[0]);
 
-      fileReader.onload = (res) => {
-        if (res.target) {
-          const buffer = res.target.result;
-          // var typedarray = new Uint8Array(this.result);
-          if (res.target.result) {
-            const review = pdfjs.getDocument(res.target.result);
-            console.log(review);
-          }
-        }
+      fileReader.readAsArrayBuffer(fileItem);
+
+      fileReader.onload = function () {
+        // console.log(fileReader.result);
+        const typedarray = new Uint8Array(fileReader.result as ArrayBuffer);
+
+        // const review = pdfjs.getDocument(typedarray);
+        // console.log(review);
+        const loadingTask = pdfjs.getDocument(typedarray);
+        loadingTask.promise.then((pdf: any) => {
+          console.log(pdfjsWorker);
+        });
       };
     }
 
