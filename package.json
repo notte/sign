@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@jbtje/vite-vue3pdf": "^0.1.0",
     "@vue/eslint-config-prettier": "^7.0.0",
     "@vue/eslint-config-standard": "^8.0.1",
     "@vue/eslint-config-typescript": "^11.0.2",
@@ -17,6 +18,8 @@
     "i": "^0.3.7",
     "mitt": "^3.0.0",
     "npm": "^8.19.2",
+    "pdfjs": "^2.4.7",
+    "pdfjs-dist": "^2.5.207",
     "pinia": "^2.0.23",
     "postcss": "^8.4.18",
     "postcss-import": "^15.0.0",
@@ -25,7 +28,9 @@
     "stylelint-config-standard": "^29.0.0",
     "stylelint-scss": "^4.3.0",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17",
-    "vue": "^3.2.41"
+    "vue": "^3.2.41",
+    "vue-pdf-embed": "^1.1.5",
+    "vue3-pdfjs": "^0.1.6"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^3.2.0",
