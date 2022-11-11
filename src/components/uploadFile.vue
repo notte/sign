@@ -17,19 +17,18 @@
     </label>
     <p v-if="fileName === ''">或拖曳檔案至此處</p>
     <p>{{ fileName }}</p>
-    <canvas class="pdf-item"></canvas>
-    <!-- <preview /> -->
+    <canvas id="the-canvas"></canvas>
   </div>
   <button type="button" class="active" @click="uploadFile">上傳簽署文件</button>
 </template>
 <script lang="ts">
 import { defineComponent, onMounted, ref } from "vue";
-// import preview from "./components/preview.vue";
 import * as pdfjs from "pdfjs-dist";
-const pdfjsWorker = await import("pdfjs-dist/build/pdf.worker.entry");
+
 // import pdfjsWorker from "pdfjs-dist/build/pdf.worker.entry";
 // const pdfjs = await import("pdfjs-dist/build/pdf");
 
+const pdfjsWorker = await import("pdfjs-dist/build/pdf.worker.entry");
 pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
 export default defineComponent({
@@ -56,19 +55,49 @@ export default defineComponent({
     function handleFiles(event: Event): void {
       const fileItem = (event as any).target.files[0];
       const fileReader = new FileReader();
-
       fileReader.readAsArrayBuffer(fileItem);
 
       fileReader.onload = function () {
-        // console.log(fileReader.result);
-        const typedarray = new Uint8Array(fileReader.result as ArrayBuffer);
+        const loadingTask = pdfjs.getDocument({ data: fileReader.result });
 
-        // const review = pdfjs.getDocument(typedarray);
-        // console.log(review);
-        const loadingTask = pdfjs.getDocument(typedarray);
-        loadingTask.promise.then((pdf: any) => {
-          console.log(pdfjsWorker);
-        });
+        loadingTask.promise.then(
+          function (pdf: any) {
+            console.log("PDF loaded");
+
+            // Fetch the first page
+            const pageNumber = 1;
+            pdf.getPage(pageNumber).then(function (page: any) {
+              console.log("Page loaded");
+
+              const scale = 0.3;
+              const viewport = page.getViewport({ scale });
+
+              // Prepare canvas using PDF page dimensions
+              const canvas = document.getElementById(
+                "the-canvas"
+              ) as HTMLCanvasElement;
+              if (canvas) {
+                const context = canvas.getContext("2d");
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                // Render PDF page into canvas context
+                const renderContext = {
+                  canvasContext: context,
+                  viewport,
+                };
+                const renderTask = page.render(renderContext);
+                renderTask.promise.then(function () {
+                  console.log("Page rendered");
+                });
+              }
+            });
+          },
+          function (reason: any) {
+            // PDF loading error
+            console.error(reason);
+          }
+        );
       };
     }
 
