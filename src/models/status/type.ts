@@ -3,4 +3,5 @@ export enum SignType {
   documents = "documents",
   upload = "upload",
   complete = "complete",
+  preview = "preview",
 }

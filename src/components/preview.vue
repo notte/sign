@@ -1,58 +1,63 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-  <div class="pdf-preview"></div>
-  <div class="pdf-wrap">
-    <vue-pdf-embed
-      :source="state.source"
-      :style="scaleFun"
-      class="vue-pdf-embed"
-      :page="state.pageNum"
-    />
-  </div>
+  <canvas id="the-canvas"></canvas>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, onMounted } from "vue";
-// import VuePdfEmbed from "vue-pdf-embed";
-import { createLoadingTask } from "vue3-pdfjs/esm";
+import { defineComponent, onMounted } from "vue";
+import * as pdfjs from "pdfjs-dist";
+const pdfjsWorker = await import("pdfjs-dist/build/pdf.worker.entry");
+pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
 export default defineComponent({
   components: {},
-  props: ["pdfUrl"],
+  props: ["fileItem"],
   setup(props) {
-    const pdfUrls = ref<string>(props.pdfUrl);
-    const state = reactive({
-      source: pdfUrls.value,
-      pageNum: 1,
-      scale: 1,
-      numPages: 0,
-    });
-
     onMounted(() => {
-      const loadingTask = createLoadingTask(state.source);
-      loadingTask.promise.then((pdf: { numPages: number }) => {
-        state.numPages = pdf.numPages;
-      });
+      const fileItems = props.fileItem;
+
+      PDF(fileItems);
     });
 
-    return { pdfUrls, state };
+    function PDF(file: any): void {
+      const fileReader = new FileReader();
+      fileReader.readAsArrayBuffer(file);
+
+      fileReader.onload = () => {
+        const loadingTask = pdfjs.getDocument({ data: fileReader.result });
+
+        loadingTask.promise
+          .then((pdf) => {
+            const pageNumber = 1;
+            pdf.getPage(pageNumber).then((page) => {
+              const scale = 1;
+              const viewport = page.getViewport({ scale });
+
+              const canvas = document.getElementById(
+                "the-canvas"
+              ) as HTMLCanvasElement;
+
+              const context = canvas.getContext("2d");
+
+              canvas.width = viewport.width;
+              canvas.height = viewport.height;
+
+              const renderContext = {
+                canvasContext: context,
+                viewport,
+              };
+              const renderTask = page.render(renderContext);
+              renderTask.promise.then(function () {
+                console.log("Page rendered");
+              });
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      };
+    }
+    return { PDF };
   },
 });
 </script>
-<style lang="css" scoped>
-.pdf-preview {
-  position: relative;
-  height: 100vh;
-  padding: 20px 0;
-  box-sizing: border-box;
-  background: rgb(66, 66, 66);
-}
-
-.vue-pdf-embed {
-  text-align: center;
-  width: 515px;
-  border: 1px solid #e5e5e5;
-  margin: 0 auto;
-  box-sizing: border-box;
-}
-</style>

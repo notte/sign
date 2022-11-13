@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <p class="steps">1. 上傳文件</p>
-  <div class="uploadfile">
+  <div class="uploadfile" id="drop-area">
     <label for="upload">
       <input
         class="upload"
@@ -17,88 +17,64 @@
     </label>
     <p v-if="fileName === ''">或拖曳檔案至此處</p>
     <p>{{ fileName }}</p>
-    <canvas id="the-canvas"></canvas>
   </div>
-  <button type="button" class="active" @click="uploadFile">上傳簽署文件</button>
+  <button type="button" class="active" @click.once="uploadFile">
+    上傳簽署文件
+  </button>
 </template>
 <script lang="ts">
 import { defineComponent, onMounted, ref } from "vue";
-import * as pdfjs from "pdfjs-dist";
-
-// import pdfjsWorker from "pdfjs-dist/build/pdf.worker.entry";
-// const pdfjs = await import("pdfjs-dist/build/pdf");
-
-const pdfjsWorker = await import("pdfjs-dist/build/pdf.worker.entry");
-pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+import EventBus from "../utilities/event-bus";
 
 export default defineComponent({
-  // components: { preview },
   setup() {
     const file = ref();
+    const dropFile = ref();
     const fileName = ref<string>("");
-
-    onMounted(() => {
-      const fileID = document.getElementById("upload");
-      fileID?.addEventListener("change", () => {
-        if (file.value.files.length > 0) {
-          fileName.value = file.value.files[0].name;
-        } else {
-          fileName.value = "";
-        }
-      });
-    });
+    const fileItem = ref();
 
     function uploadFile(): void {
-      // console.log(file.value);
+      EventBus.emit("upload_file", fileItem.value);
     }
 
-    function handleFiles(event: Event): void {
-      const fileItem = (event as any).target.files[0];
+    function handleFiles(event: any): void {
+      fileItem.value = event.target.files[0];
+      fileName.value = event.target.files[0].name;
+    }
 
-      if (fileItem.type === "application/pdf") {
-        PDF(fileItem);
-      } else {
-        console.log(fileItem.type);
+    onMounted(() => {
+      const dropArea = document.getElementById("drop-area");
+      if (dropArea) {
+        dropArea.addEventListener(
+          "drop",
+          (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            fileItem.value = e.dataTransfer?.files[0];
+            fileName.value = e.dataTransfer?.files[0].name;
+          },
+          false
+        );
+
+        dropArea.addEventListener("dragleave", (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+        });
+        dropArea.addEventListener("dragenter", (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+        });
+        dropArea.addEventListener("dragover", (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+        });
       }
-    }
-    function PDF(file: any): void {
-      const fileReader = new FileReader();
-      fileReader.readAsArrayBuffer(file);
+    });
+    // function dropFile(event: any): void {
+    //   console.log(event);
+    // }
 
-      fileReader.onload = () => {
-        const loadingTask = pdfjs.getDocument({ data: fileReader.result });
-
-        loadingTask.promise
-          .then((pdf) => {
-            const pageNumber = 1;
-            pdf.getPage(pageNumber).then((page) => {
-              const scale = 3;
-              const viewport = page.getViewport({ scale });
-              const canvas = document.getElementById(
-                "the-canvas"
-              ) as HTMLCanvasElement;
-              const context = canvas.getContext("2d");
-              // canvas.height = viewport.height;
-              // canvas.width = viewport.width;
-              canvas.height = 500;
-              canvas.width = 200;
-              const renderContext = {
-                canvasContext: context,
-                viewport,
-              };
-              const renderTask = page.render(renderContext);
-              renderTask.promise.then(function () {
-                console.log("Page rendered");
-              });
-            });
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      };
-    }
-
-    return { file, fileName, uploadFile, handleFiles };
+    return { file, dropFile, fileName, uploadFile, handleFiles };
   },
 });
 </script>
