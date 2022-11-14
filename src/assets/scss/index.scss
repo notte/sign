@@ -20,6 +20,11 @@
           background-color: #49ffe1;
      }
 
+     button.claer_button {
+          background-color: #44464b;
+          color: #fff;
+     }
+
      h3 {
           font-size: 1.2rem;
           font-weight: 700;
@@ -53,7 +58,7 @@
 }
 
 .layout {
-     @apply p-8 rounded w-3/6 flex flex-col justify-center items-center;
+     @apply p-8 rounded flex flex-col justify-center items-center;
 
      background-color: #34363a;
 }
@@ -89,7 +94,7 @@
      }
 
      .sign-container {
-          @apply p-10 bg-white;
+          @apply bg-white;
      }
 
      .small-button {
@@ -118,6 +123,8 @@
 }
 
 #the-canvas {
-     width: 70%;
-     height: 100%;
+     @apply block;
+
+     max-height: 80vh;
+     max-width: 60vw;
 }

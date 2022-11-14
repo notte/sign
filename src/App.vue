@@ -4,11 +4,7 @@
     <button @click="setTabs(signature, $event)">建立簽名</button>
   </div>
   <div class="layout">
-    <!-- <uploadFile />
-    <signDocuments />
-    <signature />
-    <complete /> -->
-
+    <!-- <preview /> -->
     <uploadFile v-if="isShow(upload)" />
     <preview v-if="isShow(preview)" :fileItem="fileItem" />
     <signDocuments v-if="isShow(documents)" />

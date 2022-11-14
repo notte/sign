@@ -15,11 +15,17 @@ export default defineComponent({
   setup(props) {
     onMounted(() => {
       const fileItems = props.fileItem;
+      console.log(fileItems.type);
 
-      PDF(fileItems);
+      if (fileItems.type === "application/pdf") {
+        setPdf(fileItems);
+      }
+      if (fileItems.type === "image/png" || fileItems.type === "image/jpeg") {
+        setImage(fileItems);
+      }
     });
 
-    function PDF(file: any): void {
+    function setPdf(file: any): void {
       const fileReader = new FileReader();
       fileReader.readAsArrayBuffer(file);
 
@@ -57,7 +63,25 @@ export default defineComponent({
           });
       };
     }
-    return { PDF };
+
+    function setImage(file: any): void {
+      const fileReader = new FileReader();
+      const canvas = document.getElementById("the-canvas") as HTMLCanvasElement;
+      const context = canvas.getContext("2d");
+      const image = new Image();
+
+      fileReader.readAsDataURL(file);
+
+      image.onload = function () {
+        canvas.width = image.width;
+        canvas.height = image.height;
+        context.drawImage(image, 0, 0);
+      };
+      fileReader.onload = () => {
+        image.src = fileReader.result;
+      };
+    }
+    return { setPdf, setImage };
   },
 });
 </script>
