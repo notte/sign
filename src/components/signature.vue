@@ -17,34 +17,66 @@
 import { defineComponent, ref, onMounted } from "vue";
 import { signStore } from "../store/index";
 
+interface IState {
+  ctx: CanvasRenderingContext2D | null;
+  events: string[] | null;
+}
+
 export default defineComponent({
   components: {},
   setup() {
+    let canvas: HTMLCanvasElement | null = null;
+    let ctx: CanvasRenderingContext2D | null = null;
+    let state: IState;
     const signStores = signStore();
     const sign = ref();
-    const events =
-      "ontouchstart" in window
-        ? ["touchstart", "touchmove", "touchend"]
-        : ["mousedown", "mousemove", "mouseup"];
 
     onMounted(() => {
-      const canvas = sign.value as HTMLCanvasElement;
-      const ctx = canvas.getContext("2d");
+      canvas = sign.value as HTMLCanvasElement;
+      ctx = canvas.getContext("2d");
+      state = {
+        ctx,
+        events:
+          "ontouchstart" in window
+            ? ["touchstart", "touchmove", "touchend"]
+            : ["mousedown", "mousemove", "mouseup"],
+      };
 
-      canvas.addEventListener(events[0], startEventHandler, false);
-      canvas.addEventListener(events[1], moveEventHandler, false);
-      canvas.addEventListener(events[2], endEventHandler, false);
+      if (state.events) {
+        canvas.addEventListener(state.events[0], startEventHandler, false);
+      }
     });
 
-    function moveEventHandler(event: any): void {
+    function startEventHandler(event): void {
       event.preventDefault();
-      const { ctx, isSupportTouch } = state;
-      const evt = isSupportTouch ? event.touches[0] : event;
-      const coverPos = canvas.getBoundingClientRect();
+      ctx.beginPath();
+      canvas?.addEventListener(state.events[1], moveEventHandler, false);
+      canvas?.addEventListener(state.events[2], endEventHandler, false);
+    }
+
+    function moveEventHandler(event): void {
+      event.preventDefault();
+      let evt;
+
+      if (event.touches) {
+        evt = event.touches[0];
+      } else {
+        evt = event;
+      }
+
+      const coverPos = canvas?.getBoundingClientRect();
       const mouseX = evt.clientX - coverPos.left;
       const mouseY = evt.clientY - coverPos.top;
-      cxt.lineTo(mouseX, mouseY);
-      cxt.stroke();
+      ctx.lineTo(mouseX, mouseY);
+      ctx.stroke();
+    }
+
+    function endEventHandler(event): void {
+      event.preventDefault();
+      ctx.closePath();
+
+      canvas?.removeEventListener(state.events[1], moveEventHandler, false);
+      canvas?.removeEventListener(state.events[2], endEventHandler, false);
     }
 
     // let beginX: number, beginY: number;
@@ -88,29 +120,24 @@ export default defineComponent({
     //   ctx.stroke();
     // }
 
-    // function clearSignature(): void {
-    //   const canvas = sign.value as HTMLCanvasElement;
-    //   const ctx = canvas.getContext("2d");
-    //   if (ctx) {
-    //     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    //   }
-    // }
+    function clearSignature(): void {
+      ctx?.clearRect(0, 0, canvas.width, canvas.height);
+    }
 
-    // function setSignature(): void {
-    //   const canvas = sign.value as HTMLCanvasElement;
-    //   const signItem = canvas.toDataURL("image/png");
-
-    //   if (signStores.getSignOne === "") {
-    //     signStores.setSignOne(signItem);
-    //   } else if (signStores.getSignSec === "") {
-    //     signStores.setSignSec(signItem);
-    //   } else {
-    //     console.log("too many");
-    //   }
-    // }
+    function setSignature(): void {
+      const signItem = canvas?.toDataURL("image/png");
+      console.log(signItem);
+      // if (signStores.getSignOne === "") {
+      //   signStores.setSignOne(signItem);
+      // } else if (signStores.getSignSec === "") {
+      //   signStores.setSignSec(signItem);
+      // } else {
+      //   console.log("too many");
+      // }
+    }
 
     // return { sign, signStores, writing, clearSignature, setSignature };
-    return { sign, signStores, events };
+    return { sign, ctx, canvas, signStores, clearSignature, setSignature };
   },
 });
 </script>
