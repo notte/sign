@@ -111,7 +111,7 @@
           @apply flex;
 
           li {
-               @apply p-3 mt-4 mr-2 bg-white relative;
+               @apply p-3 mt-4 mr-2 bg-white relative cursor-pointer;
 
                width: 100px;
                height: 50px;
@@ -137,6 +137,6 @@
 #the-canvas {
      @apply block;
 
-     max-height: 80vh;
+     max-height: 60vh;
      max-width: 60vw;
 }

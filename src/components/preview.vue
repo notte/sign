@@ -1,13 +1,14 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
+  <p class="steps">2. 選定簽名，進行輸出合併</p>
   <canvas id="the-canvas"></canvas>
   <signlist />
+  <button>輸出</button>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from "vue";
+import { defineComponent, onMounted } from "vue";
 import signlist from "./signlist.vue";
-// import { fabric } from "fabric";
 import * as pdfjs from "pdfjs-dist";
 const pdfjsWorker = await import("pdfjs-dist/build/pdf.worker.entry");
 pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
@@ -16,18 +17,7 @@ export default defineComponent({
   components: { signlist },
   props: ["fileItem"],
   setup(props) {
-    const doc = ref();
-
     onMounted(() => {
-      const watchDoc = document.getElementById("the-canvas");
-      // const fabricCanvas = new fabric.Canvas(watchDoc);
-
-      // watchDoc.addEventListener("mousemove", (e) => {
-      //   console.log(e);
-      // });
-
-      console.log(doc.value, document.getElementById("the-canvas"));
-
       const fileItems = props.fileItem;
       console.log(fileItems.type);
 

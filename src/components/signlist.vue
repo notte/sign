@@ -2,12 +2,18 @@
 <template>
   <div class="signature">
     <ul>
-      <li v-if="signStores.signOne !== ''">
+      <li
+        v-if="signStores.signOne !== ''"
+        @click="getSign($event, signStores.signOne)"
+      >
         <img :src="signOne" alt="" /><button @click="signStores.signOne = ''">
           <img src="../assets/close.png" alt="" />
         </button>
       </li>
-      <li v-if="signStores.signSec !== ''">
+      <li
+        v-if="signStores.signSec !== ''"
+        @click="getSign($event, signStores.signSec)"
+      >
         <img :src="signSec" alt="" /><button @click="signStores.signSec = ''">
           <img src="../assets/close.png" alt="" />
         </button>
@@ -31,10 +37,16 @@ export default defineComponent({
       signSec.value = signStores.signSec;
     });
 
+    function getSign(event: Event, sign: string): void {
+      event.stopPropagation();
+      console.log(event.target);
+    }
+
     return {
       signStores,
       signOne,
       signSec,
+      getSign,
     };
   },
 });
