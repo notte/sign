@@ -50,7 +50,7 @@ export default defineComponent({
           (e) => {
             e.stopPropagation();
             e.preventDefault();
-            fileName.value = e.dataTransfer?.files[0].name;
+            fileName.value = e.dataTransfer?.files[0].name as string;
             fileItem.value = e.dataTransfer?.files[0];
           },
           false

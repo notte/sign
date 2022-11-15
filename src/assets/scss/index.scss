@@ -111,12 +111,24 @@
           @apply flex;
 
           li {
-               @apply p-3 mt-4 mr-2 bg-white;
+               @apply p-3 mt-4 mr-2 bg-white relative;
+
+               width: 100px;
+               height: 50px;
+
+               img {
+                    @apply w-full h-full;
+               }
 
                button {
-                    background-color: #83858a;
-                    color: #fff;
-                    font-size: 12px;
+                    @apply absolute;
+
+                    top: -13px;
+                    padding: 7px;
+                    right: 3px;
+                    width: 23px;
+                    border-radius: 33px;
+                    background-color: #34363a;
                }
           }
      }

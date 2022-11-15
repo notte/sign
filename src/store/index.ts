@@ -7,10 +7,6 @@ export const signStore = defineStore("id", {
       signSec: "",
     };
   },
-  getters: {
-    getSignOne: (state) => state.signOne,
-    getSignSec: (state) => state.signSec,
-  },
   actions: {
     setSignOne(sign: string) {
       this.signOne = sign;

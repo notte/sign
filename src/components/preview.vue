@@ -1,19 +1,33 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <canvas id="the-canvas"></canvas>
+  <signlist />
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
+import signlist from "./signlist.vue";
+// import { fabric } from "fabric";
 import * as pdfjs from "pdfjs-dist";
 const pdfjsWorker = await import("pdfjs-dist/build/pdf.worker.entry");
 pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
 export default defineComponent({
-  components: {},
+  components: { signlist },
   props: ["fileItem"],
   setup(props) {
+    const doc = ref();
+
     onMounted(() => {
+      const watchDoc = document.getElementById("the-canvas");
+      // const fabricCanvas = new fabric.Canvas(watchDoc);
+
+      // watchDoc.addEventListener("mousemove", (e) => {
+      //   console.log(e);
+      // });
+
+      console.log(doc.value, document.getElementById("the-canvas"));
+
       const fileItems = props.fileItem;
       console.log(fileItems.type);
 
@@ -63,7 +77,6 @@ export default defineComponent({
           });
       };
     }
-
     function setImage(file: any): void {
       const fileReader = new FileReader();
       const canvas = document.getElementById("the-canvas") as HTMLCanvasElement;
@@ -75,12 +88,13 @@ export default defineComponent({
       image.onload = function () {
         canvas.width = image.width;
         canvas.height = image.height;
-        context.drawImage(image, 0, 0);
+        context?.drawImage(image, 0, 0);
       };
       fileReader.onload = () => {
-        image.src = fileReader.result;
+        image.src = fileReader.result as string;
       };
     }
+
     return { setPdf, setImage };
   },
 });
