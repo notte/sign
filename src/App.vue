@@ -7,9 +7,9 @@
     <!-- <preview /> -->
     <uploadFile v-if="isShow(upload)" />
     <preview v-if="isShow(preview)" :fileItem="fileItem" />
-    <signDocuments v-if="isShow(documents)" />
-    <signature v-if="isShow(signature)" />
+    <signDocuments v-if="isShow(documents)" :signData="signData" />
     <complete v-if="isShow(complete)" />
+    <signature v-if="isShow(signature)" />
   </div>
 </template>
 <script lang="ts">
@@ -26,17 +26,23 @@ export default defineComponent({
   components: { uploadFile, signature, signDocuments, complete, preview },
   setup() {
     const current = ref(Status.SignType.upload);
-    const documents = ref(Status.SignType.documents);
     const upload = ref(Status.SignType.upload);
-    const signature = ref(Status.SignType.signature);
-    const complete = ref(Status.SignType.complete);
     const preview = ref(Status.SignType.preview);
+    const documents = ref(Status.SignType.documents);
+    const complete = ref(Status.SignType.complete);
+    const signature = ref(Status.SignType.signature);
     const tabs = ref();
     const fileItem = ref();
+    const signData = ref();
 
     EventBus.on("upload_file", (file) => {
       current.value = preview.value;
       fileItem.value = file;
+    });
+
+    EventBus.on("set_print", (data) => {
+      current.value = documents.value;
+      signData.value = data;
     });
 
     function isShow(page: Status.SignType): boolean {
@@ -62,6 +68,7 @@ export default defineComponent({
       fileItem,
       isShow,
       setTabs,
+      signData,
     };
   },
 });

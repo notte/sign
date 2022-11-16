@@ -3,11 +3,11 @@
   <div class="signature">
     <!-- 編輯簽名區塊 -->
     <canvas class="sign-container" ref="sign" id="sign" />
-    <button type="button" class="claer_button" @click="clearSignature">
+    <button type="button" class="claer-button" @click="clearSignature">
       清除簽名
     </button>
     <button type="button" @click="setSignature">建立簽名</button>
-    <signlist />
+    <signlist :type="'signature'" />
   </div>
 </template>
 <script lang="ts">

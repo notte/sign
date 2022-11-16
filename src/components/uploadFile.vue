@@ -18,7 +18,12 @@
     <p v-if="fileName === ''">或拖曳檔案至此處</p>
     <p>{{ fileName }}</p>
   </div>
-  <button type="button" class="active" @click.once="uploadFile">
+  <button
+    type="button"
+    :class="getFile === true ? 'disabled' : ''"
+    @click.once="uploadFile"
+    :disabled="getFile"
+  >
     上傳簽署文件
   </button>
 </template>
@@ -31,7 +36,8 @@ export default defineComponent({
     const file = ref();
     const dropFile = ref();
     const fileName = ref<string>("");
-    const fileItem = ref();
+    const fileItem = ref<string | undefined | File>("");
+    const getFile = ref<boolean>(true);
 
     function uploadFile(): void {
       EventBus.emit("upload_file", fileItem.value);
@@ -40,21 +46,19 @@ export default defineComponent({
     function handleFiles(event: any): void {
       fileItem.value = event.target.files[0];
       fileName.value = event.target.files[0].name;
+      getFile.value = false;
     }
 
     onMounted(() => {
       const dropArea = document.getElementById("drop-area");
       if (dropArea) {
-        dropArea.addEventListener(
-          "drop",
-          (e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            fileName.value = e.dataTransfer?.files[0].name as string;
-            fileItem.value = e.dataTransfer?.files[0];
-          },
-          false
-        );
+        dropArea.addEventListener("drop", (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          fileName.value = e.dataTransfer?.files[0].name as string;
+          fileItem.value = e.dataTransfer?.files[0];
+          getFile.value = false;
+        });
 
         dropArea.addEventListener("dragleave", (e) => {
           e.stopPropagation();
@@ -70,11 +74,8 @@ export default defineComponent({
         });
       }
     });
-    // function dropFile(event: any): void {
-    //   console.log(event);
-    // }
 
-    return { file, dropFile, fileName, uploadFile, handleFiles };
+    return { file, dropFile, fileName, getFile, uploadFile, handleFiles };
   },
 });
 </script>

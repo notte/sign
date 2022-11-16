@@ -2,7 +2,7 @@
 <template>
   <div class="complete">
     <p class="steps">簽署已完成</p>
-    <button>再次上傳文件</button>
+    <button>下載已簽名文件</button>
   </div>
 </template>
 <script lang="ts">

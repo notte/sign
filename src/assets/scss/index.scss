@@ -20,9 +20,13 @@
           background-color: #49ffe1;
      }
 
-     button.claer_button {
+     button.claer-button {
           background-color: #44464b;
           color: #fff;
+     }
+
+     button.disabled {
+          background-color: #54877e;
      }
 
      h3 {
@@ -111,10 +115,11 @@
           @apply flex;
 
           li {
-               @apply p-3 mt-4 mr-2 bg-white relative cursor-pointer;
+               @apply mt-4 mr-2 bg-white relative cursor-pointer;
 
                width: 100px;
                height: 50px;
+               padding: 3px;
 
                img {
                     @apply w-full h-full;
@@ -130,6 +135,12 @@
                     border-radius: 33px;
                     background-color: #34363a;
                }
+          }
+
+          li.active {
+               border-radius: 3px;
+               border: 3px solid #ffca48;
+               box-sizing: border-box;
           }
      }
 }
