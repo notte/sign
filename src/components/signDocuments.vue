@@ -15,7 +15,7 @@ export default defineComponent({
   components: {},
   props: ["signData"],
   setup(props) {
-    let canvas;
+    let canvas: fabric.Canvas;
     const signDatas = props!.signData;
 
     onMounted(() => {

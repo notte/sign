@@ -45,7 +45,7 @@ export default defineComponent({
       }
     });
 
-    function startEventHandler(event): void {
+    function startEventHandler(event: { preventDefault: () => void }): void {
       event.preventDefault();
       ctx?.beginPath();
       canvas?.addEventListener(state.events![1], moveEventHandler, false);
@@ -69,7 +69,7 @@ export default defineComponent({
       ctx?.stroke();
     }
 
-    function endEventHandler(event): void {
+    function endEventHandler(event: { preventDefault: () => void }): void {
       event.preventDefault();
       ctx?.closePath();
 

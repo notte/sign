@@ -4,7 +4,6 @@
     <button @click="setTabs(signature, $event)">建立簽名</button>
   </div>
   <div class="layout">
-    <!-- <preview /> -->
     <uploadFile v-if="isShow(upload)" />
     <preview v-if="isShow(preview)" :fileItem="fileItem" />
     <signDocuments v-if="isShow(documents)" :signData="signData" />
@@ -39,7 +38,6 @@ export default defineComponent({
       current.value = preview.value;
       fileItem.value = file;
     });
-
     EventBus.on("set_print", (data) => {
       current.value = documents.value;
       signData.value = data;
@@ -48,7 +46,6 @@ export default defineComponent({
     function isShow(page: Status.SignType): boolean {
       return current.value === page;
     }
-
     function setTabs(page: Status.SignType, e: Event): void {
       current.value = page;
       for (const item of tabs.value.children) {
