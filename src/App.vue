@@ -8,7 +8,6 @@
       <uploadFile v-if="isShow(upload)" />
       <preview v-if="isShow(preview)" :fileItem="fileItem" />
       <signDocuments v-if="isShow(documents)" :signData="signData" />
-      <complete v-if="isShow(complete)" />
       <signature v-if="isShow(signature)" />
     </div>
   </div>
@@ -18,19 +17,17 @@ import { defineComponent, ref } from "vue";
 import uploadFile from "./components/uploadFile.vue";
 import signature from "./components/signature.vue";
 import signDocuments from "./components/signDocuments.vue";
-import complete from "./components/complete.vue";
 import preview from "./components/preview.vue";
 import * as Status from "./models/status/type";
 import EventBus from "./utilities/event-bus";
 
 export default defineComponent({
-  components: { uploadFile, signature, signDocuments, complete, preview },
+  components: { uploadFile, signature, signDocuments, preview },
   setup() {
     const current = ref(Status.SignType.upload);
     const upload = ref(Status.SignType.upload);
     const preview = ref(Status.SignType.preview);
     const documents = ref(Status.SignType.documents);
-    const complete = ref(Status.SignType.complete);
     const signature = ref(Status.SignType.signature);
     const tabs = ref();
     const fileItem = ref();
@@ -61,7 +58,6 @@ export default defineComponent({
       documents,
       upload,
       signature,
-      complete,
       preview,
       tabs,
       fileItem,

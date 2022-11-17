@@ -46,9 +46,9 @@ export default defineComponent({
       fileReader.onload = () => {
         const loadingTask = pdfjs.getDocument({ data: fileReader.result });
 
-        loadingTask.promise.then((pdf) => {
+        loadingTask.promise.then((pdf: any) => {
           const pageNumber = 1;
-          pdf.getPage(pageNumber).then((page) => {
+          pdf.getPage(pageNumber).then((page: any) => {
             const scale = 1;
             const viewport = page.getViewport({ scale });
             const canvas = document.getElementById(

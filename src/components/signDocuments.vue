@@ -36,18 +36,19 @@ export default defineComponent({
 
       fabric.Image.fromURL(signDatas.canvas, (img) => {
         canvas.setBackgroundImage(signDatas.canvas, () => canvas.renderAll());
-        canvas.setHeight(img.height);
-        canvas.setWidth(img.width);
+        canvas.setHeight(img.height as number);
+        canvas.setWidth(img.width as number);
         pdfSize.width = img.width as number;
         pdfSize.height = img.height as number;
       });
     });
 
     function setSigned(type: string): void {
-      const signed = canvas.toDataURL("image/jpeg");
+      const signed = canvas.toDataURL();
 
       if (type === "pdf") {
-        const doc = new jsPDF("", "pt", [pdfSize.width, pdfSize.height]);
+        // eslint-disable-next-line new-cap
+        const doc = new jsPDF(undefined, "pt", [pdfSize.width, pdfSize.height]);
         doc.addImage(signed, "JPEG", 0, 0, pdfSize.width, pdfSize.height);
         doc.save("signed.pdf");
       }
@@ -57,7 +58,7 @@ export default defineComponent({
       }
     }
 
-    return { canvas, setSigned };
+    return { setSigned };
   },
 });
 </script>

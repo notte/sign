@@ -52,7 +52,7 @@ export default defineComponent({
       canvas?.addEventListener(state.events![2], endEventHandler, false);
     }
 
-    function moveEventHandler(event): void {
+    function moveEventHandler(event: any): void {
       event.preventDefault();
       let evt;
 
