@@ -43,12 +43,6 @@ export default defineComponent({
       fileReader.readAsArrayBuffer(file);
       currentType.value = "application/pdf";
 
-      const fileReaderURL = new FileReader();
-      fileReaderURL.readAsDataURL(file);
-      fileReaderURL.onload = () => {
-        // currentCanvas.value = fileReaderURL.result as string;
-      };
-
       fileReader.onload = () => {
         const loadingTask = pdfjs.getDocument({ data: fileReader.result });
 
@@ -62,7 +56,6 @@ export default defineComponent({
             ) as HTMLCanvasElement;
 
             const context = canvas.getContext("2d");
-
             canvas.width = viewport.width;
             canvas.height = viewport.height;
 
@@ -72,7 +65,8 @@ export default defineComponent({
             };
             const renderTask = page.render(renderContext);
             renderTask.promise.then(function () {
-              // console.log("Page rendered");
+              const bg = canvas.toDataURL("image/png");
+              currentCanvas.value = bg as string;
             });
           });
         });
@@ -97,7 +91,6 @@ export default defineComponent({
         currentType.value = "image/png";
       };
     }
-
     function setPrint(): void {
       if (currentSign.value === "") {
         alert("請選擇一個簽名，或建立新的簽名。");

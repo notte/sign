@@ -1,14 +1,16 @@
 <template>
-  <div class="tabs" ref="tabs">
-    <button class="active" @click="setTabs(upload, $event)">簽署文件</button>
-    <button @click="setTabs(signature, $event)">建立簽名</button>
-  </div>
-  <div class="layout">
-    <uploadFile v-if="isShow(upload)" />
-    <preview v-if="isShow(preview)" :fileItem="fileItem" />
-    <signDocuments v-if="isShow(documents)" :signData="signData" />
-    <complete v-if="isShow(complete)" />
-    <signature v-if="isShow(signature)" />
+  <div class="scroll">
+    <div class="tabs" ref="tabs">
+      <button class="active" @click="setTabs(upload, $event)">簽署文件</button>
+      <button @click="setTabs(signature, $event)">編輯簽名</button>
+    </div>
+    <div class="layout">
+      <uploadFile v-if="isShow(upload)" />
+      <preview v-if="isShow(preview)" :fileItem="fileItem" />
+      <signDocuments v-if="isShow(documents)" :signData="signData" />
+      <complete v-if="isShow(complete)" />
+      <signature v-if="isShow(signature)" />
+    </div>
   </div>
 </template>
 <script lang="ts">

@@ -1,21 +1,28 @@
-<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div class="signature">
     <p class="steps">3. 文件簽名編輯</p>
-    <!-- 上傳文件 review -->
-    <canvas id="sign-canvas" width="600" height="400"></canvas>
-    <button type="button" @click="setSignature">完成簽署</button>
+    <canvas id="sign-canvas"></canvas>
+    <div class="download">
+      <button type="button" @click="setSigned('pdf')">下載 PDF</button>
+      <button type="button" @click="setSigned('jpg')">下載 JPG</button>
+    </div>
   </div>
 </template>
 <script lang="ts">
 import { defineComponent, onMounted } from "vue";
 import { fabric } from "fabric";
+import { saveAs } from "file-saver";
+import { jsPDF } from "jspdf";
 
 export default defineComponent({
   components: {},
   props: ["signData"],
   setup(props) {
     let canvas: fabric.Canvas;
+    const pdfSize = {
+      width: 0,
+      height: 0,
+    };
     const signDatas = props!.signData;
 
     onMounted(() => {
@@ -27,17 +34,30 @@ export default defineComponent({
         canvas.add(img).renderAll();
       });
 
-      if (signDatas.type !== "application/pdf") {
-        fabric.Image.fromURL(signDatas.canvas, (img) => {
-          canvas.setBackgroundImage(signDatas.canvas, () => canvas.renderAll());
-          canvas.setHeight(img.height);
-          canvas.setWidth(img.width);
-        });
-      } else {
-        console.log(signDatas.canvas);
-      }
+      fabric.Image.fromURL(signDatas.canvas, (img) => {
+        canvas.setBackgroundImage(signDatas.canvas, () => canvas.renderAll());
+        canvas.setHeight(img.height);
+        canvas.setWidth(img.width);
+        pdfSize.width = img.width as number;
+        pdfSize.height = img.height as number;
+      });
     });
-    return { canvas };
+
+    function setSigned(type: string): void {
+      const signed = canvas.toDataURL("image/jpeg");
+
+      if (type === "pdf") {
+        const doc = new jsPDF("", "pt", [pdfSize.width, pdfSize.height]);
+        doc.addImage(signed, "JPEG", 0, 0, pdfSize.width, pdfSize.height);
+        doc.save("signed.pdf");
+      }
+
+      if (type === "jpg") {
+        saveAs(signed, "signed.jpg");
+      }
+    }
+
+    return { canvas, setSigned };
   },
 });
 </script>
