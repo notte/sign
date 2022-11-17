@@ -44,7 +44,7 @@ export default defineComponent({
     });
 
     function setSigned(type: string): void {
-      const signed = canvas.toDataURL();
+      const signed = canvas.toDataURL("image/jpeg");
 
       if (type === "pdf") {
         // eslint-disable-next-line new-cap

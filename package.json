@@ -23,7 +23,6 @@
     "jspdf": "^2.5.1",
     "mitt": "^3.0.0",
     "npm": "^8.19.2",
-    "pdf-signatures": "^0.1.0",
     "pdfjs-dist": "^2.16.105",
     "pinia": "^2.0.23",
     "pinia-plugin-persist": "^1.0.0",
