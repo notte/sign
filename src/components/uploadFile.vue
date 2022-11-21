@@ -8,8 +8,6 @@
         id="upload"
         type="file"
         accept="image/*,.pdf"
-        capture
-        aria-label="file"
         ref="file"
         @change="handleFiles($event)"
       />

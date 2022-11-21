@@ -9,7 +9,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted } from "vue";
+import { defineComponent, onMounted, onBeforeUnmount } from "vue";
 import { fabric } from "fabric";
 import { saveAs } from "file-saver";
 import { jsPDF } from "jspdf";
@@ -24,8 +24,12 @@ export default defineComponent({
       height: 0,
     };
     const signDatas = props!.signData;
+    const scroll: HTMLElement | null = document.querySelector(".scroll");
 
     onMounted(() => {
+      if (scroll) {
+        scroll.classList.add("h-auto");
+      }
       canvas = new fabric.Canvas("sign-canvas");
 
       fabric.Image.fromURL(signDatas.sign, (img) => {
@@ -43,13 +47,22 @@ export default defineComponent({
       });
     });
 
+    onBeforeUnmount(() => {
+      if (scroll) {
+        scroll.classList.remove("h-auto");
+      }
+    });
     function setSigned(type: string): void {
-      const signed = canvas.toDataURL("image/jpeg");
+      const signed = (canvas as unknown as HTMLCanvasElement).toDataURL(
+        "image/jpeg",
+        1.0
+      );
 
       if (type === "pdf") {
         // eslint-disable-next-line new-cap
-        const doc = new jsPDF(undefined, "pt", [pdfSize.width, pdfSize.height]);
-        doc.addImage(signed, "JPEG", 0, 0, pdfSize.width, pdfSize.height);
+        const doc = new jsPDF("p", "pt", [pdfSize.width, pdfSize.height], true);
+        doc.addImage(signed, "PNG", 0, 0, pdfSize.width, pdfSize.height);
+
         doc.save("signed.pdf");
       }
 
@@ -62,3 +75,8 @@ export default defineComponent({
   },
 });
 </script>
+<style scoped lang="scss">
+.scroll {
+  height: auto !important;
+}
+</style>

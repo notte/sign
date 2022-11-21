@@ -1,7 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div class="signature">
-    <!-- 編輯簽名區塊 -->
     <canvas class="sign-container" ref="sign" id="sign" />
     <button type="button" class="claer-button" @click="clearSignature">
       清除簽名
@@ -61,7 +60,6 @@ export default defineComponent({
       } else {
         evt = event;
       }
-
       const coverPos = canvas?.getBoundingClientRect();
       const mouseX = evt.clientX - coverPos!.left;
       const mouseY = evt.clientY - coverPos!.top;

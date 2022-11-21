@@ -13,7 +13,7 @@
           @apply w-full h-full absolute overflow-x-auto overflow-y-auto;
 
           .scroll {
-               @apply flex justify-center items-center p-10;
+               @apply flex justify-center items-center p-10 h-full;
           }
      }
 
@@ -148,14 +148,14 @@
           }
      }
 
-     .download{
+     .download {
           @apply flex justify-center items-center;
 
-          button{
-               flex:1;
+          button {
+               flex: 1;
           }
 
-          button:first-child{
+          button:first-child {
                margin-right: 10px;
           }
      }
@@ -169,8 +169,6 @@
 }
 
 .canvas-container {
-     // max-height: 60vh;
-
      canvas {
           @apply w-full h-full;
      }

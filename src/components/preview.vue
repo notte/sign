@@ -65,7 +65,7 @@ export default defineComponent({
             };
             const renderTask = page.render(renderContext);
             renderTask.promise.then(function () {
-              const bg = canvas.toDataURL("image/png");
+              const bg = canvas.toDataURL("image/jpeg");
               currentCanvas.value = bg as string;
             });
           });
