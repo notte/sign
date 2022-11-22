@@ -46,14 +46,14 @@ export default defineComponent({
     function getSign(event: Event, sign: string): void {
       event.stopPropagation();
       event.preventDefault();
+      const path = event.composedPath();
 
       for (const item of signlist.value.children) {
         item.className = "";
       }
-
-      for (const item of (event as any).path) {
-        if (item.nodeName === "LI") {
-          item.className = "active";
+      for (const item of path) {
+        if ((item as HTMLElement).nodeName === "LI") {
+          (item as HTMLElement).className = "active";
         }
       }
       EventBus.emit("current-sign", sign);
