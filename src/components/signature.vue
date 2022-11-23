@@ -25,7 +25,7 @@ export default defineComponent({
     let canvas: HTMLCanvasElement | null = null;
     let ctx: CanvasRenderingContext2D | null = null;
     let state: IState;
-    const signStores = signStore();
+    const signStores: any = signStore();
     const sign = ref();
 
     onMounted(() => {
