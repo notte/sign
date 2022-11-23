@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 
 export const signStore = defineStore("id", {
+  persist: true,
   state: () => {
     return {
       signOne: "",
@@ -14,8 +15,5 @@ export const signStore = defineStore("id", {
     setSignSec(sign: string) {
       this.signSec = sign;
     },
-  },
-  persist: {
-    enabled: true,
   },
 });
