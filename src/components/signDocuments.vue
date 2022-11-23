@@ -45,6 +45,55 @@ export default defineComponent({
         pdfSize.width = img.width as number;
         pdfSize.height = img.height as number;
       });
+
+      canvas.on("object:moving", (e) => {
+        // 阻止对象移动到画布外面
+        const padding = 0; // 内容距离画布的空白宽度，主动设置
+        const obj: any = e.target;
+        if (
+          obj.currentHeight > obj.canvas.height - padding * 2 ||
+          obj.currentWidth > obj.canvas.width - padding * 2
+        ) {
+          return;
+        }
+        obj.setCoords();
+        if (
+          obj.getBoundingRect().top < padding ||
+          obj.getBoundingRect().left < padding
+        ) {
+          obj.top = Math.max(
+            obj.top,
+            obj.top - obj.getBoundingRect().top + padding
+          );
+          obj.left = Math.max(
+            obj.left,
+            obj.left - obj.getBoundingRect().left + padding
+          );
+        }
+        if (
+          obj.getBoundingRect().top + obj.getBoundingRect().height >
+            obj.canvas.height - padding ||
+          obj.getBoundingRect().left + obj.getBoundingRect().width >
+            obj.canvas.width - padding
+        ) {
+          obj.top = Math.min(
+            obj.top,
+            obj.canvas.height -
+              obj.getBoundingRect().height +
+              obj.top -
+              obj.getBoundingRect().top -
+              padding
+          );
+          obj.left = Math.min(
+            obj.left,
+            obj.canvas.width -
+              obj.getBoundingRect().width +
+              obj.left -
+              obj.getBoundingRect().left -
+              padding
+          );
+        }
+      });
     });
 
     onBeforeUnmount(() => {
